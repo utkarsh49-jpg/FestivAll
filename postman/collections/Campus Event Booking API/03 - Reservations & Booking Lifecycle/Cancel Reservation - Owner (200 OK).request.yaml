@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/api/reservations/{{reservationId}}"
+method: DELETE
+headers:
+  Authorization: Bearer {{studentToken}}
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 200 OK', function () {
+          pm.response.to.have.status(200);
+      });
+      const res = pm.response.json();
+      pm.test('Reservation cancelled successfully', function () {
+          pm.expect(res.message).to.eql('Reservation cancelled successfully');
+      });
+    language: text/javascript
+order: 8000

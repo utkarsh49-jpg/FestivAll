@@ -1,0 +1,31 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "name": "Postman Test Student",
+        "email": "postman_student_{{$timestamp}}@campus.edu",
+        "password": "{{studentPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 201 Created', function () {
+          pm.response.to.have.status(201);
+      });
+      const res = pm.response.json();
+      pm.test('Returns JWT token and user profile', function () {
+          pm.expect(res).to.have.property('token');
+          pm.expect(res.user).to.have.property('id');
+          pm.expect(res.user.role).to.eql('STUDENT');
+          pm.expect(res.user).to.not.have.property('password_hash');
+      });
+      if (res.token) {
+          pm.collectionVariables.set('studentToken', res.token);
+      }
+    language: text/javascript
+order: 1000

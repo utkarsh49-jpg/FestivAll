@@ -1,0 +1,12 @@
+$kind: collection
+description: Comprehensive Postman test collection for the Campus Event Booking full-stack project. Covers JWT Authentication, Public Discovery, Reservation Lifecycle, Row-Level Concurrency, Error Handling, and SQL Analytics (JOIN, GROUP BY, and aggregates).
+variables:
+  baseUrl: http://localhost:5000
+  studentEmail: postman_student@campus.edu
+  studentPassword: StudentPassword123!
+  studentToken: ""
+  otherUserToken: ""
+  adminToken: ""
+  eventId: "35"
+  seatId: "1702"
+  reservationId: ""

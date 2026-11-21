@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/api/analytics/events"
+method: GET
+headers:
+  Authorization: Bearer {{studentToken}}
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 403 Forbidden', function () {
+          pm.response.to.have.status(403);
+      });
+      const res = pm.response.json();
+      pm.test('Access denied due to insufficient permissions', function () {
+          pm.expect(res.error).to.include('insufficient permissions');
+      });
+    language: text/javascript
+order: 3000

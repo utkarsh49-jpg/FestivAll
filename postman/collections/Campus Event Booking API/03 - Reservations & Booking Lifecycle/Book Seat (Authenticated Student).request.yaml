@@ -1,0 +1,29 @@
+$kind: http-request
+url: "{{baseUrl}}/api/reservations"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{studentToken}}
+body:
+  type: text
+  content: |-
+    {
+        "event_id": {{eventId}},
+        "seat_id": {{seatId}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 201 Created', function () {
+          pm.response.to.have.status(201);
+      });
+      const res = pm.response.json();
+      pm.test('Reservation created with ACTIVE status', function () {
+          pm.expect(res.reservation).to.have.property('id');
+          pm.expect(res.reservation.status).to.eql('ACTIVE');
+      });
+      if (res.reservation && res.reservation.id) {
+          pm.collectionVariables.set('reservationId', res.reservation.id);
+      }
+    language: text/javascript
+order: 1000

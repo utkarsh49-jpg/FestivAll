@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/api/reservations/{{reservationId}}"
+method: DELETE
+headers:
+  Authorization: Bearer {{otherUserToken}}
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 403 Forbidden', function () {
+          pm.response.to.have.status(403);
+      });
+      const res = pm.response.json();
+      pm.test('Reports access denied for non-owner', function () {
+          pm.expect(res.error).to.include('Access denied');
+      });
+    language: text/javascript
+order: 7000

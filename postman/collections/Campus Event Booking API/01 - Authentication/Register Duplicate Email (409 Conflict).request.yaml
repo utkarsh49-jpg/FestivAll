@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "name": "Duplicate Attempt",
+        "email": "user1@campus.edu",
+        "password": "{{studentPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 409 Conflict', function () {
+          pm.response.to.have.status(409);
+      });
+      const res = pm.response.json();
+      pm.test('Contains duplicate email error', function () {
+          pm.expect(res.error).to.eql('Email already registered');
+      });
+    language: text/javascript
+order: 2000

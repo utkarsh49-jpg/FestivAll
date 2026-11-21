@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/reservations/{{reservationId}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 200 OK', function () {
+          pm.response.to.have.status(200);
+      });
+      const res = pm.response.json();
+      pm.test('Returns exact reservation details', function () {
+          pm.expect(String(res.id)).to.eql(String(pm.collectionVariables.get('reservationId')));
+      });
+    language: text/javascript
+order: 5000

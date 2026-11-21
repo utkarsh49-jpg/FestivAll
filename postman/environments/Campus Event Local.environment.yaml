@@ -1,0 +1,4 @@
+name: Campus Event Local
+values:
+  - key: baseUrl
+    value: ''

@@ -1,0 +1,13 @@
+# Use this workspace to collaborate
+workspace:
+  id: bdc1e13f-c928-4765-8ae0-c266d70b8018
+
+localResources:
+  collections:
+    - ../campus_event_booking.postman_collection.json
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/Campus Event Booking API: fe5b03e6-4ab5-42f8-a7cf-ee1b47750787

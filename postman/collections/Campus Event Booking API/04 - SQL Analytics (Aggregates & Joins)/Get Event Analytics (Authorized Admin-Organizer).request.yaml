@@ -1,0 +1,29 @@
+$kind: http-request
+name: Get Event Analytics (Authorized Admin/Organizer)
+url: "{{baseUrl}}/api/analytics/events"
+method: GET
+headers:
+  Authorization: Bearer {{adminToken}}
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 200 OK', function () {
+          pm.response.to.have.status(200);
+      });
+      const res = pm.response.json();
+      pm.test('Analytics response contains aggregate event metrics', function () {
+          pm.expect(res).to.have.property('count');
+          pm.expect(res.events).to.be.an('array');
+          if (res.events.length > 0) {
+              const ev = res.events[0];
+              pm.expect(ev).to.have.property('event_id');
+              pm.expect(ev).to.have.property('venue_name');
+              pm.expect(ev).to.have.property('total_seats');
+              pm.expect(ev).to.have.property('booked_seats');
+              pm.expect(ev).to.have.property('available_seats');
+              pm.expect(ev).to.have.property('active_reservations');
+              pm.expect(ev).to.have.property('occupancy_rate_percent');
+          }
+      });
+    language: text/javascript
+order: 1000

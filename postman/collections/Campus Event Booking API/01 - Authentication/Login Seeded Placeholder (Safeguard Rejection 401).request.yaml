@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "email": "user1@campus.edu",
+        "password": "seeded_password_hash"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 401 Unauthorized', function () {
+          pm.response.to.have.status(401);
+      });
+      const res = pm.response.json();
+      pm.test('Rejects placeholder seeded credentials', function () {
+          pm.expect(res.error).to.include('placeholder credentials');
+      });
+    language: text/javascript
+order: 5000
